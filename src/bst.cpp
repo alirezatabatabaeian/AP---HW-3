@@ -58,7 +58,7 @@ void BST::bfs(std::function<void(Node*& node)> func) const
     }
 }
 
-size_t BST::length()const
+size_t BST::length() const
 {
     size_t num {};
     bfs([&num](BST::Node*& node) { num++; });
@@ -107,4 +107,29 @@ std::ostream& operator<<(std::ostream& out, const BST& bst)
     std::cout << "binary search tree size: " << bst.length() << std::endl;
     std::cout << std::string(80, '*') << std::endl;
     return out;
+}
+
+BST::Node** BST::find_node(int _value)
+{
+    BST::Node** temp { &root };
+    while (true) {
+        if (*temp == nullptr) {
+            return nullptr;
+        } else if ((*temp)->value == _value) {
+            return temp;
+        } else if (_value > (*temp)->value) {
+            if ((*temp)->right == nullptr) {
+                return nullptr;
+            } else {
+                temp = &(*temp)->right;
+            }
+        } else if (_value < (*temp)->value) {
+            if ((*temp)->left == nullptr) {
+                return nullptr;
+            } else {
+                temp = &(*temp)->left;
+            }
+        }
+    }
+    return nullptr;
 }
