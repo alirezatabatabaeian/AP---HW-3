@@ -33,12 +33,13 @@ TEST(HW3Test, TEST3)
     EXPECT_EQ(default_.left, nullptr);
     EXPECT_EQ(default_.right, nullptr);
 }
-/*
-TEST(HW3Test, TEST4) {
 
-    BST::Node left{10, nullptr, nullptr};
-    BST::Node right{10, nullptr, nullptr};
-    BST::Node node{10, &left, &right};
+TEST(HW3Test, TEST4)
+{
+
+    BST::Node left { 10, nullptr, nullptr };
+    BST::Node right { 10, nullptr, nullptr };
+    BST::Node node { 10, &left, &right };
 
     std::cout << "adress of node: " << &node << std::endl;
     std::cout << "adress of left: " << &left << std::endl;
@@ -49,8 +50,9 @@ TEST(HW3Test, TEST4) {
     std::cout << std::string(80, '*') << std::endl;
 }
 
-TEST(HW3Test, TEST5) {
-    BST::Node node{5, nullptr, nullptr};
+TEST(HW3Test, TEST5)
+{
+    BST::Node node { 5, nullptr, nullptr };
 
     EXPECT_TRUE(node > 4);
     EXPECT_FALSE(node > 5);
@@ -73,7 +75,6 @@ TEST(HW3Test, TEST5) {
     EXPECT_FALSE(2 >= node);
     EXPECT_TRUE(5 == node);
     EXPECT_FALSE(3 == node);
-
 }
 
 TEST(HW3Test, TEST6) {
@@ -90,7 +91,7 @@ TEST(HW3Test, TEST7) {
     EXPECT_EQ(bst.get_root()->left->value, 5);
     EXPECT_EQ(bst.get_root()->right->value, 20);
 }
-
+/*
 TEST(HW3Test, TEST8) {
     BST bst{};
     bst.add_node(25);
