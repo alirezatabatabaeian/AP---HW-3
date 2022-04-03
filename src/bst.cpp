@@ -21,6 +21,11 @@ BST::Node::Node(const Node& node)
 {
 }
 
+BST::BST()
+    : root { nullptr }
+{
+}
+
 std::ostream& operator<<(std::ostream& cout, const BST::Node& node)
 {
     cout << std::setw(20) << std::left << &node << "=> "
@@ -34,8 +39,60 @@ std::partial_ordering BST::Node::operator<=>(int _value) const { return value <=
 
 bool BST::Node::operator==(int _value) const { return value == _value; }
 
-void BST::bfs(std::function<void(Node*& node)> func){
-    while(node != ){
-
+void BST::bfs(std::function<void(Node*& node)> func) const
+{
+    std::vector<Node*> Vec { root };
+    // Vec[0](root);
+    while (Vec.empty() == 0) {
+        Node* node = Vec[size(Vec) - 1];
+        Vec.pop_back();
+        if (node) {
+            func(node);
+            if ((*node).left) {
+                Vec.push_back((*node).left);
+            }
+            if ((*node).right) {
+                Vec.push_back((*node).right);
+            }
+        }
     }
+}
+
+size_t BST::length()
+{
+    size_t num {};
+    // this->
+    bfs([&num](BST::Node*& node) { num++; });
+    return num;
+}
+
+bool BST::add_node(int _value)
+{
+    if (!root) {
+        root = new Node(_value, nullptr, nullptr);
+        return true;
+    } else {
+        Node* node { root };
+        while (true) {
+            if (_value == (*node).value) {
+                return false;
+            } else if (_value > (*node).value) {
+                if (!(*node).right) {
+                    (*node).right = new Node(_value, nullptr, nullptr);
+                    return true;
+                } else {
+                    node = (*node).right;
+                }
+
+            } else if (_value < (*node).value) {
+                if (!(*node).left) {
+                    (*node).left = new Node(_value, nullptr, nullptr);
+                    return true;
+                } else {
+                    node = (*node).left;
+                }
+            }
+        }
+    }
+    return true;
 }
