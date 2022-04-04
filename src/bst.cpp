@@ -1,32 +1,32 @@
 #include "bst.h"
 
-BST::Node::Node(int _value, Node* _left, Node* _right)
+BST::Node::Node(int _value, Node* _left, Node* _right) // Node Constructor
     : value { _value }
     , left { _left }
     , right { _right }
 {
 }
 
-BST::Node::Node()
+BST::Node::Node() // Defult Node Constructor
     : value {}
     , left { nullptr }
     , right { nullptr }
 {
 }
 
-BST::Node::Node(const Node& node)
+BST::Node::Node(const Node& node) // Copy node
     : value { node.value }
     , left { node.left }
     , right { node.right }
 {
 }
 
-BST::BST()
+BST::BST() // BST defult
     : root { nullptr }
 {
 }
 
-BST::~BST()
+BST::~BST() // BST Destructor
 {
     std::vector<Node*> nodes;
     bfs([&nodes](BST::Node*& node) { nodes.push_back(node); });
@@ -34,13 +34,13 @@ BST::~BST()
         delete node;
 }
 
-BST::BST(const BST& _bst)
+BST::BST(const BST& _bst) // BST copy constructor
     : root { nullptr }
 {
     _bst.bfs([this](BST::Node*& node) { this->add_node((*node).value); });
 }
 
-BST::BST(BST&& _bst)
+BST::BST(BST&& _bst) // BST move constructor
     : root { nullptr }
 {
     delete root;
@@ -48,7 +48,7 @@ BST::BST(BST&& _bst)
     _bst.root = nullptr;
 }
 
-std::ostream& operator<<(std::ostream& cout, const BST::Node& node)
+std::ostream& operator<<(std::ostream& cout, const BST::Node& node) // define << operator for print
 {
     cout << std::setw(20) << std::left << &node << "=> "
          << "Value:" << std::setw(5) << std::left << node.value
@@ -57,7 +57,7 @@ std::ostream& operator<<(std::ostream& cout, const BST::Node& node)
     return cout;
 }
 
-BST& BST::operator=(BST& _bst)
+BST& BST::operator=(BST& _bst) // = operator for copy
 {
     if (this == &_bst) {
         return *this;
@@ -68,7 +68,7 @@ BST& BST::operator=(BST& _bst)
     }
 }
 
-BST& BST::operator=(BST&& _bst)
+BST& BST::operator=(BST&& _bst) // = operator for move
 {
     delete root;
     root = &(*_bst.root);
@@ -76,20 +76,20 @@ BST& BST::operator=(BST&& _bst)
     return *this;
 }
 
-std::partial_ordering BST::Node::operator<=>(int _value) const { return value <=> _value; }
+std::partial_ordering BST::Node::operator<=>(int _value) const { return value <=> _value; } // define <=> operator
 
-bool BST::Node::operator==(int _value) const { return value == _value; }
+bool BST::Node::operator==(int _value) const { return value == _value; } // define compare operator for a node
 
-void BST::bfs(std::function<void(Node*& node)> func) const
+void BST::bfs(std::function<void(Node*& node)> func) const // define bfs for running a function on a BST object
 {
     std::vector<Node*> Vec { root };
-    while (Vec.empty() == 0) {
+    while (Vec.empty() == 0) { // iterate on nodes
         Node* node = Vec[0];
-        Vec.erase(Vec.begin());
+        Vec.erase(Vec.begin()); // erase a used note
         if (node) {
             func(node);
             if ((*node).left) {
-                Vec.push_back((*node).left);
+                Vec.push_back((*node).left); // add child node using pushback to vector
             }
             if ((*node).right) {
                 Vec.push_back((*node).right);
@@ -98,29 +98,29 @@ void BST::bfs(std::function<void(Node*& node)> func) const
     }
 }
 
-size_t BST::length() const
+size_t BST::length() const // find length of a BST object (number of nodes)
 {
     size_t num {};
     bfs([&num](BST::Node*& node) { num++; });
     return num;
 }
 
-bool BST::add_node(int _value)
+bool BST::add_node(int _value) // add a node
 {
-    if (!root) {
-        root = new Node(_value, nullptr, nullptr);
+    if (!root) { // if not defined root
+        root = new Node(_value, nullptr, nullptr); // add new root
         return true;
     } else {
         Node* node { root };
-        while (true) {
-            if (_value == (*node).value) {
+        while (true) { // iterate on nodes
+            if (_value == (*node).value) { // do not add an existing node
                 return false;
             } else if (_value > (*node).value) {
                 if (!(*node).right) {
                     (*node).right = new Node(_value, nullptr, nullptr);
                     return true;
                 } else {
-                    node = (*node).right;
+                    node = (*node).right; // add node to right
                 }
 
             } else if (_value < (*node).value) {
@@ -128,7 +128,7 @@ bool BST::add_node(int _value)
                     (*node).left = new Node(_value, nullptr, nullptr);
                     return true;
                 } else {
-                    node = (*node).left;
+                    node = (*node).left; // add node to left
                 }
             }
         }
@@ -136,10 +136,10 @@ bool BST::add_node(int _value)
     return true;
 }
 
-std::ostream& operator<<(std::ostream& out, const BST& bst)
+std::ostream& operator<<(std::ostream& out, const BST& bst) // define << operator
 {
     std::cout << std::string(80, '*') << std::endl;
-    bst.bfs([&out](BST::Node*& node) { out << std::setw(20) << std::left << node << "=> "
+    bst.bfs([&out](BST::Node*& node) { out << std::setw(20) << std::left << node << "=> " // print nodes in one line
                                            << "Value:" << std::setw(5) << std::left << node->value
                                            << "Left:" << std::setw(20) << std::left << node->left
                                            << "Right:" << std::setw(20) << std::left << node->right
@@ -149,10 +149,10 @@ std::ostream& operator<<(std::ostream& out, const BST& bst)
     return out;
 }
 
-BST::Node** BST::find_node(int _value)
+BST::Node** BST::find_node(int _value) // find a node in a tree
 {
     BST::Node** temp { &root };
-    while (true) {
+    while (true) { // using features of a tree
         if (*temp == nullptr) {
             return nullptr;
         } else if ((*temp)->value == _value) {
@@ -161,7 +161,7 @@ BST::Node** BST::find_node(int _value)
             if ((*temp)->right == nullptr) {
                 return nullptr;
             } else {
-                temp = &(*temp)->right;
+                temp = &(*temp)->right; // return the address of node
             }
         } else if (_value < (*temp)->value) {
             if ((*temp)->left == nullptr) {
@@ -174,10 +174,10 @@ BST::Node** BST::find_node(int _value)
     return nullptr;
 }
 
-BST::Node** BST::find_parrent(int _value)
+BST::Node** BST::find_parrent(int _value) // find a parent of a node
 {
     BST::Node** temp { &root };
-    BST::Node** parrent { nullptr };
+    BST::Node** parrent { nullptr }; // save parent in here
     while (true) {
         if (*temp == nullptr) {
             return nullptr;
@@ -204,17 +204,17 @@ BST::Node** BST::find_parrent(int _value)
     return nullptr;
 }
 
-BST::Node** BST::find_successor(int _value)
+BST::Node** BST::find_successor(int _value) // find successor of a node
 {
     BST::Node** node { find_node(_value) };
     if (*node == nullptr) {
         return nullptr;
-    } else if ((*node)->left == nullptr) {
+    } else if ((*node)->left == nullptr) { // if no left
         return node;
     } else {
         BST::Node** temp { &(*node)->left };
         while (true) {
-            if ((*temp)->right == nullptr) {
+            if ((*temp)->right == nullptr) { // if no right after one left
                 return temp;
             } else {
                 temp = &(*temp)->right;
@@ -224,12 +224,12 @@ BST::Node** BST::find_successor(int _value)
     return nullptr;
 }
 
-bool BST::delete_node(int _value)
+bool BST::delete_node(int _value) // delete a node
 {
     BST::Node** node { find_node(_value) };
     if (node == nullptr) {
         return false;
-    } else if (((*node)->left == nullptr) && ((*node)->right == nullptr)) {
+    } else if (((*node)->left == nullptr) && ((*node)->right == nullptr)) { // delete a leaf
         BST::Node** parrent { find_parrent(_value) };
         if (_value > (*parrent)->value) {
             (*parrent)->right = nullptr;
@@ -241,7 +241,7 @@ bool BST::delete_node(int _value)
             return true;
         }
 
-    } else if ((*node)->left == nullptr) {
+    } else if ((*node)->left == nullptr) { // delete a one child node(with right child)
         BST::Node** parrent { find_parrent(_value) };
         if (_value > (*parrent)->value) {
             (*parrent)->right = (*node)->right;
@@ -252,7 +252,7 @@ bool BST::delete_node(int _value)
             // delete node;
             return true;
         }
-    } else if ((*node)->right == nullptr) {
+    } else if ((*node)->right == nullptr) { // delete a one child node(with left child)
         BST::Node** parrent { find_parrent(_value) };
         if (_value > (*parrent)->value) {
             (*parrent)->right = (*node)->left;
@@ -263,7 +263,7 @@ bool BST::delete_node(int _value)
             // delete node;
             return true;
         }
-    } else {
+    } else { // delete a two children node
         BST::Node** successor { find_successor(_value) };
         BST::Node** successor_parrent { find_parrent((*successor)->value) };
         BST::Node** parrent { find_parrent(_value) };
@@ -273,7 +273,7 @@ bool BST::delete_node(int _value)
         if ((*node)->left != nullptr) {
             (*successor)->left = (*node)->left;
         }
-        if (parrent != nullptr) {
+        if (parrent != nullptr) { // if not to be the root
             if ((*node)->value > (*parrent)->value) {
                 (*parrent)->right = *successor;
             } else if ((*node)->value < (*parrent)->value) {
@@ -292,20 +292,20 @@ bool BST::delete_node(int _value)
     return false;
 }
 
-BST& BST::operator++()
+BST& BST::operator++() // define ++a operator
 {
     this->bfs([this](BST::Node*& node) { node->value++; });
     return *this;
 }
 
-BST BST::operator++(int)
+BST BST::operator++(int) // define a++ operator
 {
     BST temp { *this };
     this->bfs([this](BST::Node*& node) { node->value++; });
-    return temp;
+    return temp; // return a not changed version
 }
 
-BST::BST(std::initializer_list<int> _list)
+BST::BST(std::initializer_list<int> _list) // to use initializing
     : root { nullptr }
 {
     for (auto i : _list)
