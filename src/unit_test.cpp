@@ -446,7 +446,7 @@ TEST(HW3Test, TEST26) {
     bst = bst;
     EXPECT_EQ(bst.get_root()->right->left->value, 8);
 }
-/*
+
 TEST(HW3Test, TEST27) {
     BST bst{};
     bst.add_node(5);
@@ -486,7 +486,7 @@ TEST(HW3Test, TEST29) {
     EXPECT_EQ((*bst1.find_successor(5))->value, 4);
     EXPECT_EQ(bst2.length(), 10);
 }
-
+/*
 TEST(HW3Test, TEST30) {
     BST bst{5, 1, 10, 2, 8, 50, 4, 60};
     BST bst2{++bst};

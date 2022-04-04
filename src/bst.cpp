@@ -26,10 +26,26 @@ BST::BST()
 {
 }
 
+BST::~BST()
+{
+    std::vector<Node*> nodes;
+    bfs([&nodes](BST::Node*& node) { nodes.push_back(node); });
+    for (auto& node : nodes)
+        delete node;
+}
+
 BST::BST(const BST& _bst)
     : root { nullptr }
 {
     _bst.bfs([this](BST::Node*& node) { this->add_node((*node).value); });
+}
+
+BST::BST(BST&& _bst)
+    : root { nullptr }
+{
+    delete root;
+    root = &(*_bst.root);
+    _bst.root = nullptr;
 }
 
 std::ostream& operator<<(std::ostream& cout, const BST::Node& node)
@@ -50,6 +66,14 @@ BST& BST::operator=(BST& _bst)
         _bst.bfs([this](BST::Node*& node) { this->add_node((*node).value); });
         return *this;
     }
+}
+
+BST& BST::operator=(BST&& _bst)
+{
+    delete root;
+    root = &(*_bst.root);
+    _bst.root = nullptr;
+    return *this;
 }
 
 std::partial_ordering BST::Node::operator<=>(int _value) const { return value <=> _value; }
@@ -266,4 +290,11 @@ bool BST::delete_node(int _value)
         return true;
     }
     return false;
+}
+
+BST::BST(std::initializer_list<int> _list)
+    : root { nullptr }
+{
+    for (auto i : _list)
+        add_node(i);
 }
