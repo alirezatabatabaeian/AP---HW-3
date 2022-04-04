@@ -42,10 +42,9 @@ bool BST::Node::operator==(int _value) const { return value == _value; }
 void BST::bfs(std::function<void(Node*& node)> func) const
 {
     std::vector<Node*> Vec { root };
-    // Vec[0](root);
     while (Vec.empty() == 0) {
-        Node* node = Vec[size(Vec) - 1];
-        Vec.pop_back();
+        Node* node = Vec[0];
+        Vec.erase(Vec.begin());
         if (node) {
             func(node);
             if ((*node).left) {
@@ -224,6 +223,28 @@ bool BST::delete_node(int _value)
             return true;
         }
     } else {
-        a
+        BST::Node** successor { find_successor(_value) };
+        BST::Node** successor_parrent { find_parrent((*successor)->value) };
+        BST::Node** parrent { find_parrent(_value) };
+        if ((*successor)->value > (*successor_parrent)->value) {
+            (*successor_parrent)->right = nullptr;
+        } else if ((*successor)->value) < (*successor_parrent)->value)
+            {
+                (*successor_parrent)->left = nullptr;
+            }
+        if ((*node)->value) > (*parrent)->value)
+            {
+                (*parrent)->right = *successor;
+            }
+        else if ((*node)->value) < (*parrent)->value)
+            {
+                (*parrent)->left = *successor;
+            }
+        if ((*node)->right != nullptr) {
+            (*successor)->right = (*node)->right;
+        }
+        if ((*node)->left != nullptr) {
+            (*successor)->left = (*node)->left;
+        }
     }
 }

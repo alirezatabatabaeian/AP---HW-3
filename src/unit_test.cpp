@@ -218,7 +218,7 @@ TEST(HW3Test, TEST15) {
     EXPECT_EQ((*node)->left, nullptr);
     EXPECT_EQ((*node)->right, nullptr);
 }
-/*
+
 TEST(HW3Test, TEST16) {
     BST bst{};
     bst.add_node(25);
@@ -232,7 +232,7 @@ TEST(HW3Test, TEST16) {
 
     EXPECT_FALSE(bst.delete_node(11));
 }
-
+/*
 TEST(HW3Test, TEST17) {
     BST bst{};
     bst.add_node(25);
