@@ -27,9 +27,9 @@ public:
     size_t length() const;
     bool add_node(int value);
     Node** find_node(int value);
-    //  Node** find_parrent(int value);
-    //  Node** find_successor(int value);
-    //  bool delete_node(int value);
+    Node** find_parrent(int value);
+    Node** find_successor(int value);
+    bool delete_node(int value);
     friend std::ostream& operator<<(std::ostream& cout, const BST& bst);
 
 private:

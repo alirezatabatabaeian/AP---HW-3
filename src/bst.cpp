@@ -133,3 +133,97 @@ BST::Node** BST::find_node(int _value)
     }
     return nullptr;
 }
+
+BST::Node** BST::find_parrent(int _value)
+{
+    BST::Node** temp { &root };
+    BST::Node** parrent { nullptr };
+    while (true) {
+        if (*temp == nullptr) {
+            return nullptr;
+        } else if (root->value == _value) {
+            return nullptr;
+        } else if ((*temp)->value == _value) {
+            return parrent;
+        } else if (_value > (*temp)->value) {
+            if ((*temp)->right == nullptr) {
+                return nullptr;
+            } else {
+                parrent = temp;
+                temp = &(*temp)->right;
+            }
+        } else if (_value < (*temp)->value) {
+            if ((*temp)->left == nullptr) {
+                return nullptr;
+            } else {
+                parrent = temp;
+                temp = &(*temp)->left;
+            }
+        }
+    }
+    return nullptr;
+}
+
+BST::Node** BST::find_successor(int _value)
+{
+    BST::Node** node { find_node(_value) };
+    if (*node == nullptr) {
+        return nullptr;
+    } else if ((*node)->left == nullptr) {
+        return node;
+    } else {
+        BST::Node** temp { &(*node)->left };
+        while (true) {
+            if ((*temp)->right == nullptr) {
+                return temp;
+            } else {
+                temp = &(*temp)->right;
+            }
+        }
+    }
+    return nullptr;
+}
+
+bool BST::delete_node(int _value)
+{
+    BST::Node** node { find_node(_value) };
+    if (*node == nullptr) {
+        return false;
+    } else if (((*node)->left == nullptr) && ((*node)->right == nullptr)) {
+        BST::Node** parrent { find_parrent(_value) };
+        if (_value > (*parrent)->value) {
+            (*parrent)->right = nullptr;
+            // delete node;
+            return true;
+        } else if (_value < (*parrent)->value) {
+            (*parrent)->left = nullptr;
+            // delete node;
+            return true;
+        }
+
+    } else if ((*node)->left == nullptr) {
+        BST::Node** parrent { find_parrent(_value) };
+        if (_value > (*parrent)->value) {
+            (*parrent)->right = (*node)->right;
+            // delete node;
+            return true;
+        } else if (_value < (*parrent)->value) {
+            (*parrent)->left = (*node)->right;
+            // delete node;
+            return true;
+        }
+    } else if ((*node)->right == nullptr) {
+        BST::Node** parrent { find_parrent(_value) };
+        if (_value > (*parrent)->value) {
+            (*parrent)->right = (*node)->left;
+            // delete node;
+            return true;
+        } else if (_value < (*parrent)->value) {
+            (*parrent)->left = (*node)->left;
+            // delete node;
+            return true;
+        }
+    } else {
+        a
+    }
+}
