@@ -292,6 +292,19 @@ bool BST::delete_node(int _value)
     return false;
 }
 
+BST& BST::operator++()
+{
+    this->bfs([this](BST::Node*& node) { node->value++; });
+    return *this;
+}
+
+BST BST::operator++(int)
+{
+    BST temp { *this };
+    this->bfs([this](BST::Node*& node) { node->value++; });
+    return temp;
+}
+
 BST::BST(std::initializer_list<int> _list)
     : root { nullptr }
 {

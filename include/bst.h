@@ -38,6 +38,8 @@ public:
     friend std::ostream& operator<<(std::ostream& cout, const BST& bst);
     BST& operator=(BST& bst);
     BST& operator=(BST&& bst);
+    BST& operator++(); //left
+    BST operator++(int); // right
 
 private:
     Node* root;
