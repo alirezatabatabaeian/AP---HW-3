@@ -22,6 +22,7 @@ public:
     };
 
     BST();
+    BST(const BST& bst);
     Node*& get_root() { return root; }
     void bfs(std::function<void(Node*& node)> func) const;
     size_t length() const;
@@ -31,6 +32,8 @@ public:
     Node** find_successor(int value);
     bool delete_node(int value);
     friend std::ostream& operator<<(std::ostream& cout, const BST& bst);
+    BST& operator=(BST& bst);
+
 
 private:
     Node* root;

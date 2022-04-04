@@ -26,6 +26,12 @@ BST::BST()
 {
 }
 
+BST::BST(const BST& _bst)
+    : root { nullptr }
+{
+    _bst.bfs([this](BST::Node*& node) { this->add_node((*node).value); });
+}
+
 std::ostream& operator<<(std::ostream& cout, const BST::Node& node)
 {
     cout << std::setw(20) << std::left << &node << "=> "
@@ -33,6 +39,17 @@ std::ostream& operator<<(std::ostream& cout, const BST::Node& node)
          << "Left:" << std::setw(20) << std::left << node.left
          << "Right:" << std::setw(20) << std::left << node.right;
     return cout;
+}
+
+BST& BST::operator=(BST& _bst)
+{
+    if (this == &_bst) {
+        return *this;
+    } else {
+        delete root;
+        _bst.bfs([this](BST::Node*& node) { this->add_node((*node).value); });
+        return *this;
+    }
 }
 
 std::partial_ordering BST::Node::operator<=>(int _value) const { return value <=> _value; }
@@ -186,7 +203,7 @@ BST::Node** BST::find_successor(int _value)
 bool BST::delete_node(int _value)
 {
     BST::Node** node { find_node(_value) };
-    if (*node == nullptr) {
+    if (node == nullptr) {
         return false;
     } else if (((*node)->left == nullptr) && ((*node)->right == nullptr)) {
         BST::Node** parrent { find_parrent(_value) };
@@ -226,25 +243,27 @@ bool BST::delete_node(int _value)
         BST::Node** successor { find_successor(_value) };
         BST::Node** successor_parrent { find_parrent((*successor)->value) };
         BST::Node** parrent { find_parrent(_value) };
-        if ((*successor)->value > (*successor_parrent)->value) {
-            (*successor_parrent)->right = nullptr;
-        } else if ((*successor)->value) < (*successor_parrent)->value)
-            {
-                (*successor_parrent)->left = nullptr;
-            }
-        if ((*node)->value) > (*parrent)->value)
-            {
-                (*parrent)->right = *successor;
-            }
-        else if ((*node)->value) < (*parrent)->value)
-            {
-                (*parrent)->left = *successor;
-            }
         if ((*node)->right != nullptr) {
             (*successor)->right = (*node)->right;
         }
         if ((*node)->left != nullptr) {
             (*successor)->left = (*node)->left;
         }
+        if (parrent != nullptr) {
+            if ((*node)->value > (*parrent)->value) {
+                (*parrent)->right = *successor;
+            } else if ((*node)->value < (*parrent)->value) {
+                (*parrent)->left = *successor;
+            }
+        } else {
+            root = *successor;
+        }
+        if ((*successor)->value > (*successor_parrent)->value) {
+            (*successor_parrent)->right = nullptr;
+        } else if ((*successor)->value < (*successor_parrent)->value) {
+            (*successor_parrent)->left = nullptr;
+        }
+        return true;
     }
+    return false;
 }
